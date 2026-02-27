@@ -7,20 +7,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/internal/tickets")
 @RequiredArgsConstructor
+@Tag(name = "Internal Tickets")
 public class InternalTicketController {
 
     private final TicketService ticketService;
 
     @GetMapping("/{uuid}")
+    @Operation(summary = "Get ticket by UUID (Internal)")
     public ResponseEntity<TicketDto> getTicketByUuid(@PathVariable String uuid) {
         TicketDto ticket = ticketService.getTicketByUuid(uuid);
         return ResponseEntity.ok(ticket);
     }
 
     @GetMapping("/schedule/{scheduleUuid}")
+    @Operation(summary = "Get tickets by schedule UUID (Internal)")
     public ResponseEntity<ApiResponse.PagedResponse<TicketDto>> getTicketsByScheduleUuid(
             @PathVariable String scheduleUuid,
             @RequestParam(defaultValue = "0") int page,
@@ -31,6 +37,7 @@ public class InternalTicketController {
     }
 
     @GetMapping("/user/{userUuid}")
+    @Operation(summary = "Get tickets by user UUID (Internal)")
     public ResponseEntity<ApiResponse.PagedResponse<TicketDto>> getTicketsByUserUuid(
             @PathVariable String userUuid,
             @RequestParam(defaultValue = "0") int page,

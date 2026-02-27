@@ -14,14 +14,19 @@ import gyt.ticket_service.model.TicketStatus;
 import gyt.ticket_service.service.TicketService;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/admin/tickets")
 @RequiredArgsConstructor
+@Tag(name = "Admin Tickets")
 public class AdminTicketController {
 
     private final TicketService ticketService;
 
     @GetMapping
+    @Operation(summary = "Get all tickets")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> getAllTickets(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -39,6 +44,7 @@ public class AdminTicketController {
     }
 
     @GetMapping("/user/{userUuid}")
+    @Operation(summary = "Get tickets by user UUID")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> getTicketsByUserUuid(
             @PathVariable String userUuid,
             @RequestParam(defaultValue = "0") int page,
@@ -57,6 +63,7 @@ public class AdminTicketController {
     }
 
     @GetMapping("/schedule/{scheduleUuid}")
+    @Operation(summary = "Get tickets by schedule UUID")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> getTicketsByScheduleUuid(
             @PathVariable String scheduleUuid,
             @RequestParam(defaultValue = "0") int page,
@@ -75,6 +82,7 @@ public class AdminTicketController {
     }
 
     @GetMapping("/status/{status}")
+    @Operation(summary = "Get tickets by status")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> getTicketsByStatus(
             @PathVariable TicketStatus status,
             @RequestParam(defaultValue = "0") int page,
@@ -93,6 +101,7 @@ public class AdminTicketController {
     }
 
     @DeleteMapping("/{uuid}")
+    @Operation(summary = "Delete ticket")
     public ResponseEntity<ApiResponse<Object>> deleteTicket(@PathVariable String uuid) {
         ticketService.deleteTicket(uuid);
         return ResponseEntity.ok(
@@ -101,6 +110,7 @@ public class AdminTicketController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search tickets (Admin)")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> searchTickets(
             @RequestParam(required = false) String userUuid,
             @RequestParam(required = false) String scheduleUuid,

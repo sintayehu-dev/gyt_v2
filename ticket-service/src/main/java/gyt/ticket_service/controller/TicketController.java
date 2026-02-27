@@ -20,14 +20,19 @@ import gyt.ticket_service.security.UserPrincipal;
 import gyt.ticket_service.service.TicketService;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/tickets")
 @RequiredArgsConstructor
+@Tag(name = "Tickets")
 public class TicketController {
 
     private final TicketService ticketService;
 
     @PostMapping
+    @Operation(summary = "Create ticket")
     public ResponseEntity<ApiResponse<TicketDto>> createTicket(
             @RequestBody TicketCreateRequest request,
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -45,6 +50,7 @@ public class TicketController {
     }
 
     @GetMapping("/{uuid}")
+    @Operation(summary = "Get ticket by UUID")
     public ResponseEntity<ApiResponse<TicketDto>> getTicketByUuid(@PathVariable String uuid) {
         TicketDto ticket = ticketService.getTicketByUuid(uuid);
         return ResponseEntity.ok(
@@ -53,6 +59,7 @@ public class TicketController {
     }
 
     @GetMapping("/my-tickets")
+    @Operation(summary = "Get my tickets")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> getMyTickets(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -73,6 +80,7 @@ public class TicketController {
     }
 
     @PutMapping("/{uuid}/confirm-payment")
+    @Operation(summary = "Confirm payment")
     public ResponseEntity<ApiResponse<TicketDto>> confirmPayment(
             @PathVariable String uuid,
             @RequestBody TicketPaymentRequest request,
@@ -87,6 +95,7 @@ public class TicketController {
     }
 
     @PutMapping("/{uuid}/cancel")
+    @Operation(summary = "Cancel ticket")
     public ResponseEntity<ApiResponse<TicketDto>> cancelTicket(
             @PathVariable String uuid,
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -100,6 +109,7 @@ public class TicketController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search tickets")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<TicketDto>>> searchTickets(
             @RequestParam(required = false) String scheduleUuid,
             @RequestParam(required = false) String status,
