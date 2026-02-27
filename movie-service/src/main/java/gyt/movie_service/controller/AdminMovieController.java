@@ -8,15 +8,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/admin/movies")
 @RequiredArgsConstructor
+@Tag(name = "Admin Movies")
 public class AdminMovieController {
 
     private final MovieService movieService;
     private final MetadataService metadataService;
 
     @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Create a new movie")
     public ResponseEntity<ApiResponse<MovieDto>> createMovie(
             @RequestParam("title") String title,
             @RequestParam(value = "description", required = false) String description,
@@ -48,6 +53,7 @@ public class AdminMovieController {
     }
 
     @PutMapping("/{uuid}")
+    @Operation(summary = "Update movie")
     public ResponseEntity<ApiResponse<MovieDto>> updateMovie(
             @PathVariable String uuid,
             @RequestBody MovieCreateRequest request) {
@@ -58,6 +64,7 @@ public class AdminMovieController {
     }
 
     @DeleteMapping("/{uuid}")
+    @Operation(summary = "Delete movie")
     public ResponseEntity<ApiResponse<Object>> deleteMovie(@PathVariable String uuid) {
         movieService.deleteMovie(uuid);
         return ResponseEntity.ok(
@@ -66,6 +73,7 @@ public class AdminMovieController {
     }
 
     @PostMapping("/genres")
+    @Operation(summary = "Create genre")
     public ResponseEntity<ApiResponse<GenreDto>> createGenre(@RequestBody GenreRequest request) {
         GenreDto genre = metadataService.createGenre(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -74,6 +82,7 @@ public class AdminMovieController {
     }
 
     @PatchMapping("/genres/{uuid}")
+    @Operation(summary = "Update genre")
     public ResponseEntity<ApiResponse<GenreDto>> patchGenre(@PathVariable String uuid, @RequestBody GenreRequest request) {
         GenreDto genre = metadataService.patchGenre(uuid, request);
         return ResponseEntity.ok(
@@ -82,6 +91,7 @@ public class AdminMovieController {
     }
 
     @DeleteMapping("/genres/{uuid}")
+    @Operation(summary = "Delete genre")
     public ResponseEntity<ApiResponse<Object>> deleteGenre(@PathVariable String uuid) {
         metadataService.deleteGenre(uuid);
         return ResponseEntity.ok(
@@ -90,6 +100,7 @@ public class AdminMovieController {
     }
 
     @PostMapping("/directors")
+    @Operation(summary = "Create director")
     public ResponseEntity<ApiResponse<DirectorDto>> createDirector(@RequestBody DirectorRequest request) {
         DirectorDto director = metadataService.createDirector(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -98,6 +109,7 @@ public class AdminMovieController {
     }
 
     @PatchMapping("/directors/{uuid}")
+    @Operation(summary = "Update director")
     public ResponseEntity<ApiResponse<DirectorDto>> patchDirector(@PathVariable String uuid, @RequestBody DirectorRequest request) {
         DirectorDto director = metadataService.patchDirector(uuid, request);
         return ResponseEntity.ok(
@@ -106,6 +118,7 @@ public class AdminMovieController {
     }
 
     @DeleteMapping("/directors/{uuid}")
+    @Operation(summary = "Delete director")
     public ResponseEntity<ApiResponse<Object>> deleteDirector(@PathVariable String uuid) {
         metadataService.deleteDirector(uuid);
         return ResponseEntity.ok(
@@ -114,6 +127,7 @@ public class AdminMovieController {
     }
 
     @PostMapping("/stars")
+    @Operation(summary = "Create star")
     public ResponseEntity<ApiResponse<StarDto>> createStar(@RequestBody StarRequest request) {
         StarDto star = metadataService.createStar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -122,6 +136,7 @@ public class AdminMovieController {
     }
 
     @PatchMapping("/stars/{uuid}")
+    @Operation(summary = "Update star")
     public ResponseEntity<ApiResponse<StarDto>> patchStar(@PathVariable String uuid, @RequestBody StarRequest request) {
         StarDto star = metadataService.patchStar(uuid, request);
         return ResponseEntity.ok(
@@ -130,6 +145,7 @@ public class AdminMovieController {
     }
 
     @DeleteMapping("/stars/{uuid}")
+    @Operation(summary = "Delete star")
     public ResponseEntity<ApiResponse<Object>> deleteStar(@PathVariable String uuid) {
         metadataService.deleteStar(uuid);
         return ResponseEntity.ok(
