@@ -7,14 +7,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/admin/schedules")
 @RequiredArgsConstructor
+@Tag(name = "Admin Schedules")
 public class AdminScheduleController {
 
     private final ScheduleService scheduleService;
 
     @PostMapping
+    @Operation(summary = "Create schedule")
     public ResponseEntity<ApiResponse<ScheduleDto>> createSchedule(@RequestBody ScheduleCreateRequest request) {
         ScheduleDto schedule = scheduleService.createSchedule(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -23,6 +28,7 @@ public class AdminScheduleController {
     }
 
     @PutMapping("/{uuid}")
+    @Operation(summary = "Update schedule")
     public ResponseEntity<ApiResponse<ScheduleDto>> updateSchedule(
             @PathVariable String uuid,
             @RequestBody ScheduleCreateRequest request) {
@@ -33,6 +39,7 @@ public class AdminScheduleController {
     }
 
     @PatchMapping("/{uuid}")
+    @Operation(summary = "Patch schedule")
     public ResponseEntity<ApiResponse<ScheduleDto>> patchSchedule(
             @PathVariable String uuid,
             @RequestBody ScheduleUpdateRequest request) {
@@ -43,6 +50,7 @@ public class AdminScheduleController {
     }
 
     @DeleteMapping("/{uuid}")
+    @Operation(summary = "Delete schedule")
     public ResponseEntity<ApiResponse<Object>> deleteSchedule(@PathVariable String uuid) {
         scheduleService.deleteSchedule(uuid);
         return ResponseEntity.ok(
@@ -51,6 +59,7 @@ public class AdminScheduleController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all schedules (Admin)")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> getAllSchedules(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -67,6 +76,7 @@ public class AdminScheduleController {
     }
 
     @GetMapping("/{uuid}")
+    @Operation(summary = "Get schedule by UUID (Admin)")
     public ResponseEntity<ApiResponse<ScheduleDto>> getScheduleByUuid(@PathVariable String uuid) {
         ScheduleDto schedule = scheduleService.getScheduleByUuid(uuid);
         return ResponseEntity.ok(

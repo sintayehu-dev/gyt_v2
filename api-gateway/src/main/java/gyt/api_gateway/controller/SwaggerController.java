@@ -45,6 +45,12 @@ public class SwaggerController {
                 movieService.put("url", "/movies/v3/api-docs");
                 urls.add(movieService);
                 
+                // Add Schedule Service
+                Map<String, String> scheduleService = new HashMap<>();
+                scheduleService.put("name", "Schedule Service");
+                scheduleService.put("url", "/schedules/v3/api-docs");
+                urls.add(scheduleService);
+                
                 Map<String, Object> config = new HashMap<>();
                 config.put("urls", urls);
                 config.put("urls.primaryName", "Auth Service");

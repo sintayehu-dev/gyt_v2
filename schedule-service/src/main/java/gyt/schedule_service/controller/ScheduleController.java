@@ -15,14 +15,19 @@ import gyt.schedule_service.dto.ScheduleDto;
 import gyt.schedule_service.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/schedules")
 @RequiredArgsConstructor
+@Tag(name = "Schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
     @GetMapping
+    @Operation(summary = "Get all schedules")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> getAllSchedules(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -39,6 +44,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{uuid}")
+    @Operation(summary = "Get schedule by UUID")
     public ResponseEntity<ApiResponse<ScheduleDto>> getScheduleByUuid(@PathVariable String uuid) {
         ScheduleDto schedule = scheduleService.getScheduleByUuid(uuid);
         return ResponseEntity.ok(
@@ -47,6 +53,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/movie/{movieUuid}")
+    @Operation(summary = "Get schedules by movie UUID")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> getSchedulesByMovieUuid(
             @PathVariable String movieUuid,
             @RequestParam(defaultValue = "0") int page,
@@ -64,6 +71,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/date/{date}")
+    @Operation(summary = "Get schedules by date")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> getSchedulesByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue = "0") int page,
@@ -81,6 +89,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/cinema/{hall}")
+    @Operation(summary = "Get schedules by cinema hall")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> getSchedulesByCinemaHall(
             @PathVariable String hall,
             @RequestParam(defaultValue = "0") int page,
@@ -98,6 +107,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/advanced-search")
+    @Operation(summary = "Advanced schedule search")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<ScheduleDto>>> advancedSearchSchedules(
             @RequestParam(required = false) String movieUuid,
             @RequestParam(required = false) String cinemaHall,
