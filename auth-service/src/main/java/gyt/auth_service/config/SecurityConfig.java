@@ -20,17 +20,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+        return http
+                .csrf().disable()
+                .cors().and()
+                .authorizeHttpRequests()
+                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/internal/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/internal/**").permitAll()
-                        .anyRequest().authenticated())
                 .addFilterBefore(new RequestLoggingFilter(),
-                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

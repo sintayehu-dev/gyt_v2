@@ -15,6 +15,9 @@ import gyt.user_service.dto.ApiResponse;
 import gyt.user_service.dto.UserProfileDto;
 import gyt.user_service.dto.RatingDto;
 import gyt.user_service.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -22,11 +25,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "User Management")
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping("/me")
+    @Operation(summary = "Get current user profile")
     public ResponseEntity<ApiResponse<UserProfileDto>> getCurrentProfile() {
         UserProfileDto profile = userService.getCurrentUserProfile();
         return ResponseEntity.ok(
@@ -35,6 +41,7 @@ public class UserController {
     }
 
     @PatchMapping("/{uuid}")
+    @Operation(summary = "Update user profile")
     public ResponseEntity<ApiResponse<UserProfileDto>> updateProfile(
             @PathVariable String uuid, 
             @RequestBody UserProfileDto dto) {
@@ -45,6 +52,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{uuid}")
+    @Operation(summary = "Delete user account")
     public ResponseEntity<ApiResponse<Object>> deleteUser(@PathVariable String uuid) {
         userService.deleteUser(uuid);
         return ResponseEntity.ok(
@@ -53,6 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/bookmarks")
+    @Operation(summary = "Bookmark schedules")
     public ResponseEntity<ApiResponse<UserProfileDto>> bookmarkSchedules(
             @RequestBody List<String> scheduleUuids) {
         String email = userService.getCurrentUserProfile().getEmail();
@@ -63,6 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/bookmarks")
+    @Operation(summary = "Get bookmarks")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<String>>> getBookmarks() {
         List<String> bookmarks = userService.getBookmarks();
         ApiResponse.ListResponse<String> listResponse = ApiResponse.ListResponse.of(bookmarks);
@@ -72,6 +82,7 @@ public class UserController {
     }
 
     @PostMapping("/ratings")
+    @Operation(summary = "Add movie rating")
     public ResponseEntity<ApiResponse<Object>> addRating(@RequestBody RatingDto ratingDto) {
         userService.addRating(ratingDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -80,6 +91,7 @@ public class UserController {
     }
 
     @GetMapping("/ratings")
+    @Operation(summary = "Get user ratings")
     public ResponseEntity<ApiResponse<ApiResponse.ListResponse<RatingDto>>> getRatings() {
         List<RatingDto> ratings = userService.getUserRatings();
         ApiResponse.ListResponse<RatingDto> listResponse = ApiResponse.ListResponse.of(ratings);

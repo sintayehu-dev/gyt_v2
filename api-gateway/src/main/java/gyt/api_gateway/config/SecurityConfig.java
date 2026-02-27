@@ -28,6 +28,8 @@ public class SecurityConfig {
                                 .cors(ServerHttpSecurity.CorsSpec::disable)
                                 .authorizeExchange(exchanges -> exchanges
                                                 .pathMatchers("/actuator/**").permitAll()
+                                                .pathMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", 
+                                                                "/webjars/**", "/auth/v3/api-docs/**", "/users/v3/api-docs/**").permitAll()
                                                 .pathMatchers("/auth/**").permitAll()
                                                 .pathMatchers("/movies", "/movies/**", "/schedules", "/schedules/**",
                                                                 "/tickets", "/tickets/**").permitAll()
